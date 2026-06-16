@@ -1,0 +1,867 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>IELTS Writing Task 2 — Essay Builder</title>
+<style>
+  :root{
+    --blue-900:#0b2a6b;
+    --blue-800:#123a8a;
+    --blue-700:#1d4ed8;
+    --blue-600:#2563eb;
+    --blue-100:#dbe7ff;
+    --blue-50:#eef4ff;
+    --yellow:#facc15;
+    --yellow-600:#eab308;
+    --yellow-100:#fef3c7;
+    --ink:#0f172a;
+    --grey:#475569;
+    --line:#e2e8f0;
+    --good:#16a34a;
+    --bad:#dc2626;
+    --bg:#f4f7ff;
+    --card:#ffffff;
+    --radius:18px;
+    --shadow:0 10px 30px rgba(18,58,138,.10);
+  }
+  *{box-sizing:border-box}
+  body{
+    margin:0;font-family:"Segoe UI",system-ui,-apple-system,Roboto,Arial,sans-serif;
+    background:var(--bg);color:var(--ink);line-height:1.6;
+  }
+  header.app{
+    background:linear-gradient(135deg,var(--blue-800),var(--blue-600));
+    color:#fff;padding:26px 20px 60px;position:relative;overflow:hidden;
+  }
+  header.app::after{
+    content:"";position:absolute;right:-60px;top:-60px;width:220px;height:220px;
+    background:radial-gradient(circle,var(--yellow) 0%,transparent 70%);opacity:.35;
+  }
+  .head-inner{max-width:1080px;margin:0 auto;position:relative;z-index:2}
+  .brandrow{display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+  .logo{
+    width:54px;height:54px;border-radius:14px;background:var(--yellow);
+    display:flex;align-items:center;justify-content:center;font-size:28px;
+    box-shadow:0 6px 16px rgba(0,0,0,.2);flex-shrink:0;
+  }
+  header.app h1{margin:0;font-size:1.55rem;letter-spacing:.3px}
+  header.app .sub{margin:2px 0 0;opacity:.92;font-size:.95rem}
+  .scorebar{
+    display:flex;gap:10px;flex-wrap:wrap;margin-top:18px;align-items:center;
+  }
+  .pts{
+    background:rgba(255,255,255,.16);border:1px solid rgba(255,255,255,.25);
+    padding:7px 14px;border-radius:999px;font-weight:600;font-size:.9rem;
+    display:flex;align-items:center;gap:7px;backdrop-filter:blur(4px);
+  }
+  .pts .big{color:var(--yellow);font-size:1.05rem}
+  .progress-wrap{flex:1;min-width:180px}
+  .progress-track{height:10px;background:rgba(255,255,255,.22);border-radius:999px;overflow:hidden}
+  .progress-fill{height:100%;width:0;background:var(--yellow);transition:width .5s ease;border-radius:999px}
+  .progress-label{font-size:.78rem;opacity:.9;margin-top:4px}
+
+  nav.tabs{
+    max-width:1080px;margin:-34px auto 0;padding:0 16px;position:relative;z-index:5;
+    display:flex;gap:8px;flex-wrap:wrap;justify-content:center;
+  }
+  .tab{
+    background:var(--card);border:2px solid transparent;color:var(--blue-800);
+    padding:10px 16px;border-radius:999px;cursor:pointer;font-weight:600;font-size:.88rem;
+    box-shadow:var(--shadow);transition:.18s;white-space:nowrap;
+  }
+  .tab:hover{transform:translateY(-2px)}
+  .tab.active{background:var(--blue-700);color:#fff;border-color:var(--yellow)}
+  .tab .dot{display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--good);margin-left:6px;opacity:0;transition:.2s}
+  .tab.done .dot{opacity:1}
+
+  main{max-width:1080px;margin:24px auto 60px;padding:0 16px}
+  .panel{display:none;animation:fade .35s ease}
+  .panel.active{display:block}
+  @keyframes fade{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+
+  .card{
+    background:var(--card);border-radius:var(--radius);padding:24px;margin-bottom:18px;
+    box-shadow:var(--shadow);border:1px solid var(--line);
+  }
+  .card h2{margin:0 0 6px;color:var(--blue-800);font-size:1.35rem;display:flex;gap:10px;align-items:center}
+  .card h3{color:var(--blue-700);margin:18px 0 8px;font-size:1.08rem}
+  .lead{color:var(--grey);margin:0 0 12px}
+  .pill{display:inline-block;background:var(--yellow-100);color:#92660a;border:1px solid var(--yellow);
+    padding:3px 12px;border-radius:999px;font-size:.78rem;font-weight:700;margin-bottom:10px}
+
+  .grid{display:grid;gap:14px}
+  .grid.two{grid-template-columns:repeat(auto-fit,minmax(250px,1fr))}
+  .grid.three{grid-template-columns:repeat(auto-fit,minmax(220px,1fr))}
+
+  .mini{
+    background:var(--blue-50);border:1px solid var(--blue-100);border-radius:14px;padding:16px;
+  }
+  .mini .ic{font-size:1.6rem}
+  .mini h4{margin:6px 0 4px;color:var(--blue-800)}
+  .mini p{margin:0;font-size:.9rem;color:var(--grey)}
+
+  .crit{border-left:5px solid var(--blue-600);background:#fff;border-radius:12px;padding:14px 16px;
+    box-shadow:0 2px 8px rgba(0,0,0,.04);border:1px solid var(--line)}
+  .crit b{color:var(--blue-800)}
+  .crit .pc{float:right;background:var(--blue-700);color:#fff;border-radius:8px;padding:2px 9px;font-size:.8rem;font-weight:700}
+
+  .typecard{cursor:pointer;border:2px solid var(--line);border-radius:14px;padding:16px;background:#fff;transition:.18s}
+  .typecard:hover{border-color:var(--blue-600);transform:translateY(-2px);box-shadow:var(--shadow)}
+  .typecard h4{margin:0 0 4px;color:var(--blue-800)}
+  .typecard .q{font-size:.85rem;color:var(--grey);font-style:italic;margin:8px 0}
+  .typecard .struct{font-size:.82rem;background:var(--blue-50);border-radius:8px;padding:8px;margin-top:8px;display:none}
+  .typecard.open .struct{display:block}
+  .typecard .tag{display:inline-block;background:var(--yellow);color:#5b4500;font-weight:700;font-size:.72rem;padding:2px 9px;border-radius:6px}
+
+  .frame{background:var(--blue-50);border:1px dashed var(--blue-600);border-radius:10px;padding:12px 14px;margin:8px 0;font-size:.92rem}
+  .frame .lbl{display:inline-block;background:var(--blue-700);color:#fff;font-size:.7rem;font-weight:700;padding:2px 8px;border-radius:6px;margin-right:6px;vertical-align:middle}
+
+  table{width:100%;border-collapse:collapse;margin:10px 0;font-size:.9rem}
+  th,td{text-align:left;padding:10px 12px;border-bottom:1px solid var(--line)}
+  th{background:var(--blue-700);color:#fff}
+  tr:nth-child(even) td{background:var(--blue-50)}
+
+  .connectors{display:grid;gap:12px;grid-template-columns:repeat(auto-fit,minmax(200px,1fr))}
+  .conbox{background:#fff;border:1px solid var(--line);border-radius:12px;padding:14px}
+  .conbox h4{margin:0 0 8px;color:var(--blue-700);font-size:.95rem}
+  .chip{display:inline-block;background:var(--yellow-100);border:1px solid var(--yellow);color:#7a5a00;
+    padding:3px 10px;border-radius:999px;font-size:.8rem;margin:3px 3px 0 0}
+
+  .vocab{width:100%;border-collapse:collapse}
+  .vocab th{background:var(--blue-800)}
+  .vocab td.ar{font-size:1.15rem;direction:rtl;font-family:"Traditional Arabic","Segoe UI",serif;color:var(--blue-800);font-weight:600}
+
+  /* write-first activity */
+  .workspace{background:var(--blue-50);border:1px solid var(--blue-100);border-radius:12px;padding:16px;margin:6px 0 4px}
+  .workspace label{display:block;font-weight:700;color:var(--blue-800);font-size:.9rem;margin:0 0 6px}
+  .ws-notes,.ws-essay{width:100%;border:2px solid var(--blue-100);border-radius:10px;padding:12px;font-family:inherit;font-size:.95rem;resize:vertical;background:#fff;color:var(--ink)}
+  .ws-notes{min-height:64px;margin-bottom:14px}
+  .ws-essay{min-height:200px;line-height:1.7}
+  .ws-essay:focus,.ws-notes:focus{outline:none;border-color:var(--blue-600)}
+  .ws-foot{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;margin-top:10px}
+  .wc{font-weight:700;font-size:.85rem;color:var(--grey);background:#fff;border:1px solid var(--line);padding:5px 12px;border-radius:999px}
+  .wc.good{color:#0c5e2a;border-color:var(--good);background:#e9f9ef}
+  .reveal-block{display:none;margin-top:14px;animation:fade .35s ease}
+  .reveal-block.show{display:block}
+
+  .essay{background:#fff;border:1px solid var(--line);border-radius:12px;padding:18px;line-height:1.85}
+  .anno{background:var(--yellow-100);border-bottom:2px solid var(--yellow-600);padding:0 2px;border-radius:3px}
+  .annoB{background:var(--blue-100);border-bottom:2px solid var(--blue-600);padding:0 2px;border-radius:3px}
+  .tooltip-key{display:flex;gap:14px;flex-wrap:wrap;font-size:.82rem;color:var(--grey);margin-bottom:10px}
+  .tooltip-key span{display:flex;align-items:center;gap:6px}
+  .sw{width:14px;height:14px;border-radius:4px;display:inline-block}
+
+  button.btn{
+    background:var(--blue-700);color:#fff;border:none;padding:11px 20px;border-radius:10px;
+    font-weight:700;cursor:pointer;font-size:.92rem;transition:.18s
+  }
+  button.btn:hover{background:var(--blue-800)}
+  button.btn.yellow{background:var(--yellow);color:#5b4500}
+  button.btn.yellow:hover{background:var(--yellow-600)}
+  button.btn.ghost{background:#fff;color:var(--blue-700);border:2px solid var(--blue-700)}
+  button.btn:disabled{opacity:.5;cursor:not-allowed}
+
+  .complete-row{display:flex;justify-content:flex-end;margin-top:6px}
+
+  /* identifier trainer */
+  .trainer .prompt{background:var(--blue-50);border:1px solid var(--blue-100);border-radius:12px;padding:16px;font-style:italic;color:var(--blue-900);margin-bottom:14px}
+  .opts{display:grid;gap:10px;grid-template-columns:repeat(auto-fit,minmax(200px,1fr))}
+  .opt{padding:12px;border:2px solid var(--line);border-radius:10px;background:#fff;cursor:pointer;font-weight:600;font-size:.88rem;transition:.15s;text-align:left}
+  .opt:hover{border-color:var(--blue-600)}
+  .opt.correct{border-color:var(--good);background:#e9f9ef;color:#0c5e2a}
+  .opt.wrong{border-color:var(--bad);background:#fdeaea;color:#8a1c1c}
+  .feedback{margin-top:12px;padding:12px;border-radius:10px;font-size:.9rem;display:none}
+  .feedback.show{display:block}
+  .feedback.ok{background:#e9f9ef;border:1px solid var(--good);color:#0c5e2a}
+  .feedback.no{background:#fdeaea;border:1px solid var(--bad);color:#8a1c1c}
+
+  /* quiz */
+  .qcount{font-weight:700;color:var(--blue-700)}
+  .qtext{font-size:1.08rem;font-weight:600;margin:6px 0 14px;color:var(--ink)}
+  .qsub{font-style:italic;color:var(--grey);font-size:.9rem;background:var(--blue-50);padding:8px 12px;border-radius:8px;margin-bottom:12px;display:none}
+  .qsub.show{display:block}
+  .result-box{text-align:center;padding:10px}
+  .scoreCircle{width:130px;height:130px;border-radius:50%;margin:10px auto;display:flex;flex-direction:column;align-items:center;justify-content:center;color:#fff;font-weight:800}
+  .scoreCircle .n{font-size:2rem;line-height:1}
+  .cert{border:6px double var(--yellow-600);border-radius:14px;padding:24px;text-align:center;background:linear-gradient(135deg,#fffdf5,#fff);margin-top:16px}
+  .cert h3{color:var(--blue-800);margin:6px 0;font-size:1.4rem}
+  .cert .name{font-size:1.6rem;color:var(--blue-700);font-weight:800;border-bottom:2px solid var(--yellow);display:inline-block;padding:0 16px 4px;margin:8px 0}
+  input.nameIn{padding:10px 14px;border:2px solid var(--blue-100);border-radius:10px;font-size:1rem;width:min(320px,100%)}
+
+  .tip{background:var(--yellow-100);border-left:5px solid var(--yellow-600);padding:12px 16px;border-radius:8px;font-size:.9rem;margin:10px 0}
+  .tip b{color:#7a5a00}
+
+  footer.app{text-align:center;padding:26px 16px 40px;color:var(--grey);font-size:.85rem}
+  footer.app .by{font-weight:700;color:var(--blue-800)}
+  .savebar{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin:6px 0 18px}
+
+  canvas#confetti{position:fixed;inset:0;pointer-events:none;z-index:999}
+  @media(max-width:640px){
+    header.app h1{font-size:1.25rem}
+    .card{padding:18px}
+  }
+</style>
+</head>
+<body>
+
+<header class="app">
+  <div class="head-inner">
+    <div class="brandrow">
+      <div class="logo">✍️</div>
+      <div>
+        <h1>IELTS Academic Writing — Task 2</h1>
+        <p class="sub">The Essay Builder · Band 4.5 → Band 6.0 · Plan · Structure · Write · Practise</p>
+      </div>
+    </div>
+    <div class="scorebar">
+      <div class="pts">⭐ <span class="big" id="ptsVal">0</span> points</div>
+      <div class="pts">🏅 <span id="badgeVal">0</span>/8 sections</div>
+      <div class="progress-wrap">
+        <div class="progress-track"><div class="progress-fill" id="progFill"></div></div>
+        <div class="progress-label" id="progLabel">0% complete — let's begin!</div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<nav class="tabs" id="tabs"></nav>
+
+<main>
+
+<!-- ============ START HERE ============ -->
+<section class="panel active" data-panel="start">
+  <div class="card">
+    <span class="pill">ORIENTATION</span>
+    <h2>👋 Welcome to Task 2</h2>
+    <p class="lead">In IELTS Academic Writing you write <b>two</b> pieces in 60 minutes. Task 1 describes a graph or chart. Task 2 — this app — is an <b>essay</b> where you give your opinion or discuss an idea. Task 2 is worth <b>twice as many marks</b> as Task 1, so it deserves the most care.</p>
+    <div class="grid three">
+      <div class="mini"><div class="ic">⏱️</div><h4>40 minutes</h4><p>Spend about 40 of your 60 minutes here. Plan for 5, write for 30, check for 5.</p></div>
+      <div class="mini"><div class="ic">📝</div><h4>250+ words</h4><p>Write at least 250 words. Aim for 260–290. Below 250 loses marks; very long essays often lose quality.</p></div>
+      <div class="mini"><div class="ic">⚖️</div><h4>Worth 2×</h4><p>Task 2 counts for two-thirds of your writing score. Always finish it.</p></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>🎯 How your essay is marked</h2>
+    <p class="lead">Examiners give a band score for each of <b>four</b> areas, then average them. Each one is worth 25%.</p>
+    <div class="grid two">
+      <div class="crit"><span class="pc">25%</span><b>Task Response</b><br><span style="font-size:.9rem;color:var(--grey)">Do you answer <i>every</i> part of the question, take a clear position, and support your ideas?</span></div>
+      <div class="crit"><span class="pc">25%</span><b>Coherence &amp; Cohesion</b><br><span style="font-size:.9rem;color:var(--grey)">Is your essay logically organised into paragraphs, with smooth linking between ideas?</span></div>
+      <div class="crit"><span class="pc">25%</span><b>Lexical Resource</b><br><span style="font-size:.9rem;color:var(--grey)">Do you use a good range of accurate vocabulary, including topic words and paraphrasing?</span></div>
+      <div class="crit"><span class="pc">25%</span><b>Grammatical Range &amp; Accuracy</b><br><span style="font-size:.9rem;color:var(--grey)">Do you use a variety of sentence structures with few errors?</span></div>
+    </div>
+    <div class="tip"><b>Band 6 target:</b> answer all parts of the task, organise clearly, and try a mix of simple and complex sentences — even with some mistakes, clear and complete writing scores well.</div>
+    <div class="complete-row"><button class="btn yellow" onclick="markDone('start')">✓ Mark this section complete (+10)</button></div>
+  </div>
+</section>
+
+<!-- ============ ESSAY TYPES ============ -->
+<section class="panel" data-panel="types">
+  <div class="card">
+    <span class="pill">STEP 1 · RECOGNISE</span>
+    <h2>📋 The 6 essay types</h2>
+    <p class="lead">The first thing to do in the exam is recognise the <b>type</b> of essay, because the type tells you how to organise your answer. Tap each card to see its structure.</p>
+    <div class="grid two" id="typeCards"></div>
+  </div>
+
+  <div class="card trainer">
+    <h2>🧠 Type Trainer</h2>
+    <p class="lead">Read each question and choose the correct essay type. Earn 5 points per correct answer.</p>
+    <div id="trainerArea"></div>
+    <div class="complete-row" style="margin-top:14px"><button class="btn yellow" id="trainerDoneBtn" onclick="markDone('types')" disabled>Finish the trainer to complete (+10)</button></div>
+  </div>
+</section>
+
+<!-- ============ ANALYSE ============ -->
+<section class="panel" data-panel="analyse">
+  <div class="card">
+    <span class="pill">STEP 2 · UNDERSTAND</span>
+    <h2>🔍 Analyse the question</h2>
+    <p class="lead">Many students lose marks by answering only <i>part</i> of the question. Spend 1–2 minutes breaking the question into pieces before you plan.</p>
+    <div class="grid two">
+      <div class="mini"><div class="ic">✏️</div><h4>1. Underline key words</h4><p>Mark the most important nouns and the task words. Don't miss anything.</p></div>
+      <div class="mini"><div class="ic">🎯</div><h4>2. Find the topic</h4><p>Say the topic in 1–2 words (e.g. "online learning", "city traffic").</p></div>
+      <div class="mini"><div class="ic">🔒</div><h4>3. Check restrictions</h4><p>Is it about a specific group or place? (e.g. <i>young</i> children, <i>developing</i> countries).</p></div>
+      <div class="mini"><div class="ic">📌</div><h4>4. Identify the task</h4><p>What exactly must you do? Often <b>two</b> things — answer both.</p></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>👀 Worked example</h2>
+    <div class="frame" style="font-style:italic">
+      "<span class="annoB">In many cities</span>, the use of <span class="anno">private cars</span> is causing serious <span class="anno">air pollution</span>. What <span class="annoB">problems</span> does this cause, and what <span class="annoB">solutions</span> can <span class="anno">governments</span> take?"
+    </div>
+    <table>
+      <tr><th>Step</th><th>Answer</th></tr>
+      <tr><td>Topic</td><td>Air pollution from private cars</td></tr>
+      <tr><td>Restriction</td><td>In cities; caused by <i>private</i> cars (not all transport)</td></tr>
+      <tr><td>Essay type</td><td>Problem &amp; Solution</td></tr>
+      <tr><td>Task 1</td><td>Explain the <b>problems</b> it causes</td></tr>
+      <tr><td>Task 2</td><td>Suggest <b>solutions</b> (focus on what <i>governments</i> can do)</td></tr>
+    </table>
+    <div class="tip"><b>Watch out:</b> if you wrote only about problems and forgot solutions — or wrote about <i>all</i> traffic instead of <i>private cars</i> — your Task Response score would drop. Always answer every part, within the limits given.</div>
+    <div class="complete-row"><button class="btn yellow" onclick="markDone('analyse')">✓ Mark this section complete (+10)</button></div>
+  </div>
+</section>
+
+<!-- ============ PLAN & STRUCTURE ============ -->
+<section class="panel" data-panel="plan">
+  <div class="card">
+    <span class="pill">STEP 3 · PLAN</span>
+    <h2>🏗️ The 4-paragraph blueprint</h2>
+    <p class="lead">Almost every Task 2 essay uses the same simple shape. Fill it with the right content for your essay type.</p>
+    <div class="grid two">
+      <div class="frame"><span class="lbl">¶1</span><b>Introduction</b><br>Paraphrase the question + give your position / say what the essay will cover. (2–3 sentences)</div>
+      <div class="frame"><span class="lbl">¶2</span><b>Body Paragraph 1</b><br>First main idea + reason + example + result. (4–5 sentences)</div>
+      <div class="frame"><span class="lbl">¶3</span><b>Body Paragraph 2</b><br>Second main idea + reason + example + result. (4–5 sentences)</div>
+      <div class="frame"><span class="lbl">¶4</span><b>Conclusion</b><br>Restate your position in new words + a final comment. (2 sentences)</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>🧩 Which content goes in each body paragraph?</h2>
+    <p class="lead">The essay type decides what your two body paragraphs are <i>about</i>.</p>
+    <table>
+      <tr><th>Essay type</th><th>Body Paragraph 1</th><th>Body Paragraph 2</th></tr>
+      <tr><td>Opinion (agree/disagree)</td><td>First reason for your view</td><td>Second reason for your view</td></tr>
+      <tr><td>Discuss both views</td><td>The first view</td><td>The second view (+ your opinion)</td></tr>
+      <tr><td>Advantages &amp; disadvantages</td><td>Advantages</td><td>Disadvantages</td></tr>
+      <tr><td>Problem &amp; solution</td><td>The problem(s)</td><td>The solution(s)</td></tr>
+      <tr><td>Cause &amp; solution</td><td>The cause(s)</td><td>The solution(s)</td></tr>
+      <tr><td>Cause &amp; effect</td><td>The cause(s)</td><td>The effect(s)</td></tr>
+    </table>
+    <div class="tip"><b>Golden rule:</b> give roughly <b>half</b> the essay to each part of the task. If you write a lot about problems and only one line about solutions, the task is only "partly" answered.</div>
+    <div class="complete-row"><button class="btn yellow" onclick="markDone('plan')">✓ Mark this section complete (+10)</button></div>
+  </div>
+</section>
+
+<!-- ============ BUILD A PARAGRAPH ============ -->
+<section class="panel" data-panel="build">
+  <div class="card">
+    <span class="pill">STEP 4 · WRITE</span>
+    <h2>✍️ Build a strong paragraph</h2>
+    <p class="lead">A weak paragraph lists many ideas with no support. A strong one takes <b>one idea</b> and explains it fully. Use this 4-part chain:</p>
+    <div class="grid two">
+      <div class="frame"><span class="lbl">I</span><b>Idea</b> — your main point (the topic sentence)</div>
+      <div class="frame"><span class="lbl">R</span><b>Reason</b> — <i>why</i> is this true? (because…)</div>
+      <div class="frame"><span class="lbl">E</span><b>Example</b> — a specific case (For example…)</div>
+      <div class="frame"><span class="lbl">R</span><b>Result</b> — so what? the effect / consequence</div>
+    </div>
+    <h3>See it in action</h3>
+    <div class="essay" style="font-size:.95rem">
+      <span class="annoB">[Idea]</span> One major benefit of working from home is that it saves a great deal of time.
+      <span class="annoB">[Reason]</span> This is because employees no longer have to spend hours commuting through heavy traffic to reach an office.
+      <span class="annoB">[Example]</span> For instance, a worker who once travelled two hours a day can now use that time to rest, exercise, or focus on tasks.
+      <span class="annoB">[Result]</span> As a result, many remote workers feel less stressed and are able to complete their work more efficiently.
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>🟦 Introduction frames</h2>
+    <p class="lead">Two sentences are enough. <b>Never copy</b> the question — paraphrase it.</p>
+    <div class="frame"><b>Sentence 1 (paraphrase):</b> "It is often argued that ______. / Nowadays, ______ has become increasingly common."</div>
+    <div class="frame"><b>Sentence 2 (your position / plan):</b> "This essay will discuss both views before giving my opinion. / In my view, ______ because ______."</div>
+
+    <h2 style="margin-top:18px">🟨 Conclusion frames</h2>
+    <div class="frame"><b>Transition + restate:</b> "In conclusion / To sum up, ______ (your thesis in new words)."</div>
+    <div class="frame"><b>Final comment:</b> "It is therefore important that ______. / I believe this trend will ______ in the future."</div>
+    <div class="tip"><b>Tip:</b> introductions and conclusions earn few marks directly, so write them quickly and spend your time on strong body paragraphs.</div>
+    <div class="complete-row"><button class="btn yellow" onclick="markDone('build')">✓ Mark this section complete (+10)</button></div>
+  </div>
+</section>
+
+<!-- ============ LINKING & VOCAB ============ -->
+<section class="panel" data-panel="vocab">
+  <div class="card">
+    <span class="pill">TOOLKIT</span>
+    <h2>🔗 Linking words bank</h2>
+    <p class="lead">Cohesion is 25% of your score. Use linkers to guide the reader — but don't overuse them.</p>
+    <div class="connectors">
+      <div class="conbox"><h4>➕ Adding ideas</h4>
+        <span class="chip">Firstly</span><span class="chip">In addition</span><span class="chip">Furthermore</span><span class="chip">Moreover</span><span class="chip">Also</span></div>
+      <div class="conbox"><h4>🔁 Contrast</h4>
+        <span class="chip">However</span><span class="chip">On the other hand</span><span class="chip">In contrast</span><span class="chip">Nevertheless</span><span class="chip">Although</span></div>
+      <div class="conbox"><h4>📐 Examples</h4>
+        <span class="chip">For example</span><span class="chip">For instance</span><span class="chip">To illustrate</span><span class="chip">such as</span></div>
+      <div class="conbox"><h4>➡️ Result / cause</h4>
+        <span class="chip">Therefore</span><span class="chip">As a result</span><span class="chip">Consequently</span><span class="chip">because</span><span class="chip">since</span></div>
+      <div class="conbox"><h4>💬 Opinion</h4>
+        <span class="chip">In my view</span><span class="chip">I believe that</span><span class="chip">It seems to me</span><span class="chip">From my perspective</span></div>
+      <div class="conbox"><h4>🏁 Concluding</h4>
+        <span class="chip">In conclusion</span><span class="chip">To sum up</span><span class="chip">All in all</span><span class="chip">Overall</span></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>📚 Essay vocabulary — English &amp; العربية</h2>
+    <p class="lead">Key terms you need to talk about essays. Learn the English word <i>and</i> how to use it.</p>
+    <table class="vocab" id="vocabTable">
+      <tr><th>English</th><th>العربية</th><th>Example use</th></tr>
+    </table>
+    <div class="complete-row"><button class="btn yellow" onclick="markDone('vocab')">✓ Mark this section complete (+10)</button></div>
+  </div>
+</section>
+
+<!-- ============ MODEL ESSAYS (WRITE-FIRST ACTIVITY) ============ -->
+<section class="panel" data-panel="models">
+  <div class="card">
+    <span class="pill">WRITE · THEN COMPARE</span>
+    <h2>📖 Writing practice + model answers</h2>
+    <p class="lead">The best way to improve is to <b>write first, then compare</b>. For each task below: brainstorm your ideas, write your own essay, then reveal an annotated model answer to check your structure. Don't peek before you try!</p>
+    <div class="tooltip-key">
+      <span><span class="sw" style="background:var(--blue-100)"></span> Structure (intro / topic sentence / conclusion)</span>
+      <span><span class="sw" style="background:var(--yellow-100)"></span> Support (reason / example / result)</span>
+    </div>
+  </div>
+
+  <!-- ESSAY 1 -->
+  <div class="card">
+    <h3>Task 1 · Opinion essay (Agree / Disagree)</h3>
+    <div class="frame" style="font-style:italic">Some people believe that children should begin learning a foreign language as soon as they start primary school, rather than waiting until secondary school. To what extent do you agree or disagree?</div>
+
+    <div class="workspace">
+      <label>🧠 Step 1 — Brainstorm: decide your position and note your two main reasons</label>
+      <textarea class="ws-notes" id="o1notes" oninput="saveDraft()" placeholder="My position: agree / disagree / partly agree&#10;Reason 1: ...&#10;Reason 2: ..."></textarea>
+      <label>✍️ Step 2 — Write your essay (aim for 250+ words, 4 paragraphs)</label>
+      <textarea class="ws-essay" id="o1essay" oninput="wc('o1');saveDraft()" placeholder="Introduction (paraphrase + your opinion)...&#10;&#10;Body paragraph 1...&#10;&#10;Body paragraph 2...&#10;&#10;Conclusion..."></textarea>
+      <div class="ws-foot">
+        <span class="wc" id="o1wc">0 words</span>
+        <button class="btn yellow" onclick="revealModel(1)">👀 I've written mine — reveal the model</button>
+      </div>
+    </div>
+
+    <div class="reveal-block" id="reveal1">
+      <div class="tip" style="background:var(--blue-50);border-left-color:var(--blue-600)"><b>Now compare.</b> Read the model below and check: Did you state a clear opinion? Did you give a reason, an example, and a result in each paragraph?</div>
+      <div class="essay">
+        <p><span class="annoB">It is sometimes argued that young children should study a foreign language from the very beginning of primary school instead of starting later. I strongly agree with this view</span>, mainly because young learners acquire languages more naturally and because an early start builds lasting confidence.</p>
+        <p><span class="annoB">The first reason I support an early start is that young children are especially good at picking up new languages.</span> <span class="anno">This is because at a young age children absorb sounds, vocabulary and grammar without consciously studying rules, much as they learn their first language.</span> <span class="anno">For example, a six-year-old who hears English songs and simple stories every day will often copy correct pronunciation almost effortlessly, whereas a teenager must memorise the same patterns through hard work.</span> <span class="anno">As a result, an early start allows learners to gain a natural accent that is very difficult to develop later.</span></p>
+        <p><span class="annoB">A further benefit is that beginning early helps learners develop confidence that stays with them for years.</span> <span class="anno">When children use a foreign language from the start of their schooling, speaking it becomes a normal, everyday activity rather than a frightening test.</span> <span class="anno">For instance, pupils who present short talks in English from the age of seven tend to feel relaxed about speaking in public as teenagers.</span> <span class="anno">Consequently, they are far more likely to keep improving throughout their education and even into adulthood.</span></p>
+        <p><span class="annoB">In conclusion, I firmly believe that foreign language teaching should begin in primary school.</span> Because young children learn languages so easily and because an early start removes much of the fear of speaking, the advantages of this approach are simply too great to ignore.</p>
+      </div>
+      <div class="tip"><b>Why it works:</b> a clear opinion in the introduction, two fully-developed reasons (Idea → Reason → Example → Result), and a conclusion that restates the position in new words. ~290 words.</div>
+    </div>
+  </div>
+
+  <!-- ESSAY 2 -->
+  <div class="card">
+    <h3>Task 2 · Discussion essay (Discuss both views + your opinion)</h3>
+    <div class="frame" style="font-style:italic">Some people think the internet has brought people closer together, while others believe it has made people more isolated. Discuss both views and give your own opinion.</div>
+
+    <div class="workspace">
+      <label>🧠 Step 1 — Brainstorm: one idea for each view, then your own opinion</label>
+      <textarea class="ws-notes" id="o2notes" oninput="saveDraft()" placeholder="View 1 (closer together): ...&#10;View 2 (more isolated): ...&#10;My opinion: ..."></textarea>
+      <label>✍️ Step 2 — Write your essay (remember: discuss BOTH views AND give your opinion)</label>
+      <textarea class="ws-essay" id="o2essay" oninput="wc('o2');saveDraft()" placeholder="Introduction (paraphrase + mention both views + your opinion)...&#10;&#10;Body paragraph 1 — first view...&#10;&#10;Body paragraph 2 — second view + your opinion...&#10;&#10;Conclusion..."></textarea>
+      <div class="ws-foot">
+        <span class="wc" id="o2wc">0 words</span>
+        <button class="btn yellow" onclick="revealModel(2)">👀 I've written mine — reveal the model</button>
+      </div>
+    </div>
+
+    <div class="reveal-block" id="reveal2">
+      <div class="tip" style="background:var(--blue-50);border-left-color:var(--blue-600)"><b>Now compare.</b> Check: Did you signal the first view as <i>other people's</i> opinion? Did you clearly give <i>your own</i> opinion?</div>
+      <div class="essay">
+        <p><span class="annoB">The internet has changed the way people communicate, and opinions are divided about its social effects.</span> <span class="annoB">While some claim it has strengthened human connections, others feel it has driven people apart. In my view, although there are real risks of isolation, the internet has mostly helped people stay closer than ever before.</span></p>
+        <p><span class="annoB">On the one hand, those who believe the internet isolates people point to the decline of face-to-face contact.</span> <span class="anno">They argue that many individuals now spend hours alone scrolling through social media instead of meeting friends or family in person.</span> <span class="anno">A common example is a family sitting together at home while each member stares at a separate screen, barely speaking to one another.</span> <span class="anno">According to this view, online interaction is shallow and cannot replace the warmth of real relationships.</span></p>
+        <p><span class="annoB">On the other hand, supporters of the internet emphasise how easily it allows people to maintain relationships across great distances.</span> <span class="anno">Thanks to video calls and messaging apps, families separated by work or migration can now see and speak to each other daily, which was almost impossible in the past.</span> <span class="anno">For instance, a worker living abroad can join a relative's birthday through a live video link and feel genuinely involved.</span> <span class="anno">In this way, technology keeps bonds alive that distance might otherwise have weakened.</span></p>
+        <p><span class="annoB">In conclusion, while excessive screen time can certainly reduce face-to-face contact, I believe the internet ultimately brings people closer.</span> Provided it is used in a balanced way, it offers powerful tools for staying connected with the people who matter most.</p>
+      </div>
+      <div class="tip"><b>Why it works:</b> view 1 is clearly signalled as <i>other people's</i> opinion ("those who believe…"), view 2 leads into the writer's own opinion, and the conclusion confirms the position. Both sides are balanced. ~280 words.</div>
+    </div>
+  </div>
+
+  <!-- SKELETONS -->
+  <div class="card">
+    <h3>📐 Quick skeletons for the other types</h3>
+    <p class="lead">Use these blueprints to practise the remaining essay types on your own.</p>
+    <div class="grid two">
+      <div class="frame"><b>Advantages &amp; Disadvantages</b><br>¶1 Intro (say if benefits or drawbacks are greater)<br>¶2 Two advantages, explained<br>¶3 Two disadvantages, explained<br>¶4 Conclusion: which side wins, in new words</div>
+      <div class="frame"><b>Problem &amp; Solution</b><br>¶1 Intro paraphrasing the issue<br>¶2 1–2 problems, explained with effects<br>¶3 1–2 realistic solutions<br>¶4 Conclusion: summarise problem + best solution</div>
+      <div class="frame"><b>Cause &amp; Solution</b><br>¶1 Intro<br>¶2 Main causes of the situation<br>¶3 What governments / individuals can do<br>¶4 Conclusion</div>
+      <div class="frame"><b>Cause &amp; Effect</b><br>¶1 Intro<br>¶2 Main causes<br>¶3 Main effects on people / society<br>¶4 Conclusion</div>
+    </div>
+    <div class="tip" id="modelsHint"><b>Section complete</b> unlocks when you've revealed both model answers. Write your essays first — you'll get +15 points for each model you unlock!</div>
+  </div>
+</section>
+
+<!-- ============ QUIZ ============ -->
+<section class="panel" data-panel="quiz">
+  <div class="card">
+    <span class="pill">CHALLENGE</span>
+    <h2>🎯 Task 2 Mastery Quiz</h2>
+    <p class="lead">12 questions on everything you've learned. Score <b>80%</b> or higher to earn your certificate. Each correct answer = 8 points.</p>
+    <div id="quizStart">
+      <button class="btn" onclick="startQuiz()">▶ Start the quiz</button>
+    </div>
+    <div id="quizBody" style="display:none">
+      <div class="qcount" id="qCount"></div>
+      <div class="qtext" id="qText"></div>
+      <div class="qsub" id="qSub"></div>
+      <div class="opts" id="qOpts"></div>
+      <div class="feedback" id="qFeedback"></div>
+      <div style="margin-top:16px"><button class="btn yellow" id="qNext" style="display:none" onclick="nextQ()">Next →</button></div>
+    </div>
+    <div id="quizResult" style="display:none"></div>
+  </div>
+</section>
+
+<!-- SAVE / LOAD -->
+<div class="savebar">
+  <button class="btn ghost" onclick="saveProgress()">💾 Save progress (JSON)</button>
+  <label class="btn ghost" style="cursor:pointer">📂 Load progress<input type="file" accept=".json" style="display:none" onchange="loadProgress(event)"></label>
+</div>
+
+</main>
+
+<footer class="app">
+  <p>IELTS Academic Writing Task 2 · Interactive Essay Builder</p>
+  <p class="by">Designed by: Nazila Motahari</p>
+</footer>
+
+<canvas id="confetti"></canvas>
+
+<script>
+/* ---------------- STATE ---------------- */
+const SECTIONS = ["start","types","analyse","plan","build","vocab","models","quiz"];
+const TAB_META = [
+  {id:"start",   label:"🏠 Start Here"},
+  {id:"types",   label:"📋 Essay Types"},
+  {id:"analyse", label:"🔍 Analyse"},
+  {id:"plan",    label:"🏗️ Plan"},
+  {id:"build",   label:"✍️ Write"},
+  {id:"vocab",   label:"🔗 Linking & Vocab"},
+  {id:"models",  label:"📖 Model Essays"},
+  {id:"quiz",    label:"🎯 Quiz"}
+];
+let state = { points:0, done:{}, quizDone:false, quizScore:0, name:"", drafts:{} };
+let revealed = {};
+
+/* ---------------- TABS ---------------- */
+const tabsEl = document.getElementById("tabs");
+TAB_META.forEach((t,i)=>{
+  const b=document.createElement("button");
+  b.className="tab"+(i===0?" active":"");
+  b.dataset.tab=t.id;
+  b.innerHTML=t.label+'<span class="dot"></span>';
+  b.onclick=()=>showPanel(t.id);
+  tabsEl.appendChild(b);
+});
+function showPanel(id){
+  document.querySelectorAll(".panel").forEach(p=>p.classList.toggle("active",p.dataset.panel===id));
+  document.querySelectorAll(".tab").forEach(t=>t.classList.toggle("active",t.dataset.tab===id));
+  window.scrollTo({top:0,behavior:"smooth"});
+}
+
+/* ---------------- POINTS / PROGRESS ---------------- */
+function addPoints(n){ state.points+=n; document.getElementById("ptsVal").textContent=state.points; }
+function markDone(id){
+  if(state.done[id]) return;
+  state.done[id]=true;
+  addPoints(10);
+  document.querySelector('.tab[data-tab="'+id+'"]').classList.add("done");
+  updateProgress();
+  popConfetti(60);
+}
+function updateProgress(){
+  const total=SECTIONS.length;
+  const count=Object.keys(state.done).filter(k=>state.done[k]).length;
+  const pct=Math.round(count/total*100);
+  document.getElementById("progFill").style.width=pct+"%";
+  document.getElementById("badgeVal").textContent=count;
+  document.getElementById("progLabel").textContent=
+    pct===100?"🎉 100% complete — fantastic work!":pct+"% complete — keep going!";
+}
+
+/* ---------------- ESSAY TYPES DATA ---------------- */
+const TYPES=[
+  {name:"Opinion (Agree / Disagree)",tag:"OPINION",
+   q:"\"Universities should accept equal numbers of male and female students. To what extent do you agree or disagree?\"",
+   struct:"Decide your position → give 2 reasons that support it. (You may also discuss the other side, then say why you disagree with it.)"},
+  {name:"Discuss Both Views",tag:"DISCUSSION",
+   q:"\"Some people prefer to live in a house, while others feel an apartment is better. Discuss both views and give your opinion.\"",
+   struct:"¶2 = first view, ¶3 = second view + your opinion. You MUST give your own opinion clearly."},
+  {name:"Advantages & Disadvantages",tag:"ADV/DIS",
+   q:"\"More people are choosing to study online. Do the advantages outweigh the disadvantages?\"",
+   struct:"¶2 = advantages, ¶3 = disadvantages. If asked 'do they outweigh', say which side is stronger."},
+  {name:"Problem & Solution",tag:"PROBLEM",
+   q:"\"Many young people leave their home towns to find work in big cities. What problems does this cause and how can they be solved?\"",
+   struct:"¶2 = problem(s) with effects, ¶3 = realistic solution(s)."},
+  {name:"Cause & Solution",tag:"CAUSE",
+   q:"\"The amount of rubbish produced by households is rising. Why is this happening and what can be done about it?\"",
+   struct:"¶2 = causes (reasons why), ¶3 = solutions (what people/governments can do)."},
+  {name:"Cause & Effect",tag:"EFFECT",
+   q:"\"In many families, both parents now work full-time. Why is this happening and what effects does it have on children?\"",
+   struct:"¶2 = causes, ¶3 = effects/consequences."}
+];
+const tc=document.getElementById("typeCards");
+TYPES.forEach(t=>{
+  const d=document.createElement("div");
+  d.className="typecard";
+  d.innerHTML=`<span class="tag">${t.tag}</span><h4 style="margin-top:8px">${t.name}</h4>
+    <div class="q">${t.q}</div>
+    <div class="struct"><b>How to structure it:</b> ${t.struct}</div>
+    <div style="font-size:.8rem;color:var(--blue-600);font-weight:600">▾ tap to see structure</div>`;
+  d.onclick=()=>d.classList.toggle("open");
+  tc.appendChild(d);
+});
+
+/* ---------------- TYPE TRAINER ---------------- */
+const TRAINER=[
+  {q:"\"Some people think that traffic problems can be reduced by making public transport free. To what extent do you agree or disagree?\"",
+   opts:["Opinion (Agree/Disagree)","Problem & Solution","Cause & Effect"],ans:0},
+  {q:"\"Many city centres are becoming crowded and noisy. What problems does this create, and what measures could be taken to improve the situation?\"",
+   opts:["Discuss Both Views","Problem & Solution","Advantages & Disadvantages"],ans:1},
+  {q:"\"Some believe tourism damages local culture, while others say it helps preserve it. Discuss both views and give your opinion.\"",
+   opts:["Discuss Both Views","Opinion (Agree/Disagree)","Cause & Solution"],ans:0},
+  {q:"\"More and more people are buying products online instead of in shops. What are the causes of this trend and what effects does it have on local businesses?\"",
+   opts:["Problem & Solution","Cause & Effect","Advantages & Disadvantages"],ans:1},
+  {q:"\"Working from home is becoming increasingly popular. Do the benefits of this development outweigh the drawbacks?\"",
+   opts:["Advantages & Disadvantages","Discuss Both Views","Cause & Effect"],ans:0}
+];
+let trIndex=0, trCorrect=0;
+function renderTrainer(){
+  const a=document.getElementById("trainerArea");
+  if(trIndex>=TRAINER.length){
+    a.innerHTML=`<div class="feedback ok show">✅ Trainer finished! You got <b>${trCorrect}/${TRAINER.length}</b> correct. Now you can spot any essay type quickly.</div>`;
+    const btn=document.getElementById("trainerDoneBtn");
+    btn.disabled=false; btn.textContent="✓ Mark this section complete (+10)";
+    return;
+  }
+  const t=TRAINER[trIndex];
+  a.innerHTML=`<div class="prompt">Q${trIndex+1}/${TRAINER.length}: ${t.q}</div>
+    <div class="opts" id="trOpts"></div>
+    <div class="feedback" id="trFb"></div>`;
+  const o=document.getElementById("trOpts");
+  t.opts.forEach((op,i)=>{
+    const b=document.createElement("button");
+    b.className="opt"; b.textContent=op;
+    b.onclick=()=>{
+      if(o.dataset.locked)return; o.dataset.locked="1";
+      const fb=document.getElementById("trFb");
+      if(i===t.ans){ b.classList.add("correct"); addPoints(5); trCorrect++;
+        fb.className="feedback ok show"; fb.innerHTML="✅ Correct! +5 points"; popConfetti(30);
+      } else {
+        b.classList.add("wrong");
+        o.children[t.ans].classList.add("correct");
+        fb.className="feedback no show"; fb.innerHTML="❌ Not quite — the answer is <b>"+t.opts[t.ans]+"</b>.";
+      }
+      const nx=document.createElement("button");
+      nx.className="btn"; nx.style.marginTop="12px"; nx.textContent=trIndex<TRAINER.length-1?"Next →":"See result";
+      nx.onclick=()=>{trIndex++;renderTrainer();};
+      fb.appendChild(document.createElement("br")); fb.appendChild(nx);
+    };
+    o.appendChild(b);
+  });
+}
+renderTrainer();
+
+/* ---------------- VOCAB ---------------- */
+const VOCAB=[
+  ["essay","مقال","I planned my essay before writing."],
+  ["opinion","رأي","In my opinion, this is a positive change."],
+  ["argument","حجّة","She gave a strong argument for her view."],
+  ["introduction","مقدّمة","The introduction paraphrases the question."],
+  ["body paragraph","فقرة العرض","Each body paragraph has one main idea."],
+  ["conclusion","خاتمة","In the conclusion, restate your opinion."],
+  ["thesis (position)","الفكرة الرئيسية","Put your thesis in the introduction."],
+  ["to paraphrase","إعادة الصياغة","Always paraphrase — never copy the question."],
+  ["advantage","ميزة","One advantage is lower cost."],
+  ["disadvantage","عيب","A disadvantage is the lack of contact."],
+  ["cause","سبب","Pollution is the main cause."],
+  ["effect","تأثير / أثر","This has a serious effect on health."],
+  ["solution","حلّ","An effective solution is better planning."],
+  ["problem","مشكلة","Traffic is a growing problem."],
+  ["to support (an idea)","يدعم","Support each idea with an example."],
+  ["to agree / disagree","يوافق / يعارض","I partly agree with this statement."]
+];
+const vt=document.getElementById("vocabTable");
+VOCAB.forEach(v=>{
+  const tr=document.createElement("tr");
+  tr.innerHTML=`<td><b>${v[0]}</b></td><td class="ar">${v[1]}</td><td style="font-size:.88rem;color:var(--grey)">${v[2]}</td>`;
+  vt.appendChild(tr);
+});
+
+/* ---------------- WRITE-FIRST MODEL ACTIVITY ---------------- */
+function wc(id){
+  const t=document.getElementById(id+"essay"); if(!t)return;
+  const txt=t.value.trim();
+  const n=txt? txt.split(/\s+/).length:0;
+  const el=document.getElementById(id+"wc");
+  el.textContent=n+" word"+(n===1?"":"s")+(n>=250?" ✓ great length!":"");
+  el.classList.toggle("good",n>=250);
+}
+function saveDraft(){
+  ["o1","o2"].forEach(id=>{
+    const e=document.getElementById(id+"essay"), nt=document.getElementById(id+"notes");
+    if(e) state.drafts[id+"essay"]=e.value;
+    if(nt) state.drafts[id+"notes"]=nt.value;
+  });
+}
+function revealModel(n){
+  document.getElementById("reveal"+n).classList.add("show");
+  if(!revealed[n]){ revealed[n]=true; addPoints(15); popConfetti(50); }
+  if(revealed[1] && revealed[2]) markDone("models");
+}
+function restoreDrafts(){
+  const d=state.drafts||{};
+  ["o1","o2"].forEach(id=>{
+    const e=document.getElementById(id+"essay"), nt=document.getElementById(id+"notes");
+    if(e && d[id+"essay"]!=null){ e.value=d[id+"essay"]; wc(id); }
+    if(nt && d[id+"notes"]!=null) nt.value=d[id+"notes"];
+  });
+}
+
+/* ---------------- QUIZ ---------------- */
+const QUIZ=[
+  {q:"What is the minimum number of words for Task 2?",o:["150 words","200 words","250 words","300 words"],a:2},
+  {q:"Roughly how long should you spend on Task 2?",o:["20 minutes","40 minutes","60 minutes","15 minutes"],a:1},
+  {q:"Which task is worth more marks in IELTS Academic Writing?",o:["Task 1","Task 2","They are equal","It depends"],a:1},
+  {q:"Which of these is NOT one of the four marking criteria?",o:["Task Response","Coherence & Cohesion","Handwriting Neatness","Grammatical Range & Accuracy"],a:2},
+  {q:"What essay type is this?",sub:"\"Some people think exams are the best way to assess students, while others prefer continuous assessment. Discuss both views and give your opinion.\"",o:["Opinion (Agree/Disagree)","Discuss Both Views","Problem & Solution","Cause & Effect"],a:1},
+  {q:"In a Problem & Solution essay, what goes in the two body paragraphs?",o:["Two opinions","Advantages & disadvantages","Problems, then solutions","Causes, then effects"],a:2},
+  {q:"What should the FIRST sentence of your introduction do?",o:["Copy the question exactly","Paraphrase the question topic","Give a personal story","List all your ideas"],a:1},
+  {q:"In the Idea–Reason–Example–Result chain, what does a good 'Example' include?",o:["A general statement","A specific case (who, when, what)","Your opinion only","A linking word"],a:1},
+  {q:"Which linking word shows CONTRAST?",o:["Furthermore","However","Therefore","For example"],a:1},
+  {q:"Why might an essay lose marks on Task Response?",o:["It uses linking words","It answers only part of the question","It has four paragraphs","It gives an opinion"],a:1},
+  {q:"In a 'Discuss both views and give your opinion' essay, you must…",o:["Only describe one view","Discuss both views AND give your own opinion","Avoid giving an opinion","Write five body paragraphs"],a:1},
+  {q:"What is the best advice for the conclusion?",o:["Add brand new ideas","Restate your position in different words","Make it the longest paragraph","Copy the introduction word-for-word"],a:1}
+];
+let qIdx=0, qScore=0;
+function startQuiz(){
+  qIdx=0; qScore=0;
+  document.getElementById("quizStart").style.display="none";
+  document.getElementById("quizResult").style.display="none";
+  document.getElementById("quizBody").style.display="block";
+  renderQ();
+}
+function renderQ(){
+  const q=QUIZ[qIdx];
+  document.getElementById("qCount").textContent=`Question ${qIdx+1} of ${QUIZ.length}`;
+  document.getElementById("qText").textContent=q.q;
+  const sub=document.getElementById("qSub");
+  if(q.sub){sub.textContent=q.sub;sub.classList.add("show");}else{sub.classList.remove("show");}
+  const fb=document.getElementById("qFeedback"); fb.className="feedback"; fb.innerHTML="";
+  document.getElementById("qNext").style.display="none";
+  const opts=document.getElementById("qOpts"); opts.innerHTML=""; opts.dataset.locked="";
+  q.o.forEach((op,i)=>{
+    const b=document.createElement("button");
+    b.className="opt"; b.textContent=op;
+    b.onclick=()=>{
+      if(opts.dataset.locked)return; opts.dataset.locked="1";
+      if(i===q.a){ b.classList.add("correct"); qScore++; addPoints(8);
+        fb.className="feedback ok show"; fb.innerHTML="✅ Correct! +8 points"; popConfetti(35);
+      } else {
+        b.classList.add("wrong"); opts.children[q.a].classList.add("correct");
+        fb.className="feedback no show"; fb.innerHTML="❌ The correct answer is highlighted in green.";
+      }
+      const nx=document.getElementById("qNext");
+      nx.style.display="inline-block";
+      nx.textContent=qIdx<QUIZ.length-1?"Next →":"See my result 🎓";
+    };
+    opts.appendChild(b);
+  });
+}
+function nextQ(){
+  if(qIdx<QUIZ.length-1){qIdx++;renderQ();}
+  else finishQuiz();
+}
+function finishQuiz(){
+  document.getElementById("quizBody").style.display="none";
+  const pct=Math.round(qScore/QUIZ.length*100);
+  const pass=pct>=80;
+  state.quizDone=true; state.quizScore=pct;
+  if(!state.done.quiz){ markDone("quiz"); }
+  const colour=pass?"linear-gradient(135deg,#16a34a,#22c55e)":"linear-gradient(135deg,#1d4ed8,#2563eb)";
+  const box=document.getElementById("quizResult");
+  box.style.display="block";
+  box.innerHTML=`
+    <div class="result-box">
+      <div class="scoreCircle" style="background:${colour}">
+        <div class="n">${pct}%</div><div style="font-size:.8rem">${qScore}/${QUIZ.length}</div>
+      </div>
+      <h3 style="color:var(--blue-800)">${pass?"🎉 You passed!":"Good effort — keep practising!"}</h3>
+      <p class="lead">${pass?"You've mastered the basics of IELTS Task 2. Enter your name for a certificate.":"You need 80% to earn the certificate. Review the lessons and try again!"}</p>
+      ${pass?`
+        <input class="nameIn" id="certName" placeholder="Type your name" value="${state.name||''}">
+        <div style="margin-top:12px">
+          <button class="btn yellow" onclick="makeCert()">🎓 Generate certificate</button>
+          <button class="btn ghost" onclick="startQuiz()">↻ Retake</button>
+        </div>
+        <div id="certHolder"></div>`
+      : `<button class="btn" onclick="startQuiz()">↻ Try again</button>`}
+    </div>`;
+  if(pass) popConfetti(180);
+}
+function makeCert(){
+  const n=(document.getElementById("certName").value||"Student").trim();
+  state.name=n;
+  document.getElementById("certHolder").innerHTML=`
+    <div class="cert">
+      <div style="font-size:2rem">🏆</div>
+      <div style="letter-spacing:2px;color:var(--yellow-600);font-weight:700;font-size:.8rem">CERTIFICATE OF ACHIEVEMENT</div>
+      <h3>IELTS Writing Task 2 — Essay Builder</h3>
+      <p style="margin:4px 0;color:var(--grey)">This certifies that</p>
+      <div class="name">${n}</div>
+      <p style="margin:4px 0;color:var(--grey)">has successfully completed the Task 2 quiz with a score of <b>${state.quizScore}%</b></p>
+      <p style="margin-top:14px;font-weight:700;color:var(--blue-800)">Designed by: Nazila Motahari</p>
+    </div>`;
+  popConfetti(120);
+}
+
+/* ---------------- SAVE / LOAD (file-based JSON) ---------------- */
+function saveProgress(){
+  saveDraft();
+  const blob=new Blob([JSON.stringify(state,null,2)],{type:"application/json"});
+  const a=document.createElement("a");
+  a.href=URL.createObjectURL(blob);
+  a.download="ielts-task2-progress.json";
+  a.click(); URL.revokeObjectURL(a.href);
+}
+function loadProgress(e){
+  const f=e.target.files[0]; if(!f)return;
+  const r=new FileReader();
+  r.onload=()=>{
+    try{
+      const d=JSON.parse(r.result);
+      state=Object.assign({points:0,done:{},quizDone:false,quizScore:0,name:"",drafts:{}},d);
+      if(!state.drafts) state.drafts={};
+      document.getElementById("ptsVal").textContent=state.points;
+      SECTIONS.forEach(s=>{ if(state.done[s]) document.querySelector('.tab[data-tab="'+s+'"]').classList.add("done"); });
+      updateProgress();
+      restoreDrafts();
+      alert("✅ Progress loaded successfully!");
+    }catch(err){ alert("Could not read that file. Please choose a valid progress file."); }
+  };
+  r.readAsText(f);
+}
+
+/* ---------------- CONFETTI ---------------- */
+const cv=document.getElementById("confetti"), ctx=cv.getContext("2d");
+let parts=[];
+function size(){cv.width=innerWidth;cv.height=innerHeight;}
+size(); addEventListener("resize",size);
+function popConfetti(n){
+  const cols=["#1d4ed8","#facc15","#2563eb","#eab308","#dbe7ff"];
+  for(let i=0;i<n;i++){
+    parts.push({x:innerWidth/2+(Math.random()-.5)*200,y:innerHeight/3,
+      vx:(Math.random()-.5)*9,vy:Math.random()*-9-3,
+      g:.25+Math.random()*.15,s:5+Math.random()*7,
+      c:cols[Math.floor(Math.random()*cols.length)],life:90+Math.random()*40,rot:Math.random()*6});
+  }
+  if(parts.length && !raf) loop();
+}
+let raf=null;
+function loop(){
+  ctx.clearRect(0,0,cv.width,cv.height);
+  parts.forEach(p=>{p.vy+=p.g;p.x+=p.vx;p.y+=p.vy;p.life--;p.rot+=.1;
+    ctx.save();ctx.translate(p.x,p.y);ctx.rotate(p.rot);ctx.fillStyle=p.c;
+    ctx.fillRect(-p.s/2,-p.s/2,p.s,p.s*.6);ctx.restore();});
+  parts=parts.filter(p=>p.life>0 && p.y<cv.height+30);
+  if(parts.length) raf=requestAnimationFrame(loop); else {raf=null;ctx.clearRect(0,0,cv.width,cv.height);}
+}
+
+updateProgress();
+</script>
+</body>
+</html>
